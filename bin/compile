@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# $1 is the build dir
+cd $1
+
+# ENV vars are not injected into the environment, but are written one per file
+# to a directory. $3 is the directory path.
+# https://devcenter.heroku.com/articles/buildpack-api#bin-compile
+RAILS_ENV=$(cat $3/RAILS_ENV) bundle exec rake webpack:compile --trace

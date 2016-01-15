@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# valid if the webpack-rails gem is present
+if [ -f $1/Gemfile ]; then
+  echo "Found a Gemfile"
+  if  grep -q webpack-rails $1/Gemfile ; then
+    echo "Found the webpack-rails gem. Applying the webpack buildpack"
+    exit 0
+  fi
+fi
+echo "Not applying the webpack buildpack"
+exit 1
