@@ -10,13 +10,15 @@ RAILS_ENV=$(cat $3/RAILS_ENV) bundle exec rake webpack:compile --trace
 
 rake_task_exists() {
   if [[ $(bundle exec rake --tasks | grep rollbar:upload_source_maps | wc -l | xargs) == 1 ]]; then
+    echo "Found the rake task to upload the source maps";
     return 0;
   else
+    echo "Did not find the rake task to upload source maps";
     return 1;
   fi
 }
 
 # Upload source maps to Rollbar
 if rake_task_exists; then
-  bundle exec rake rollbar:upload_source_maps
+  RAILS_ENV=$(cat $3/RAILS_ENV) bundle exec rake rollbar:upload_source_maps
 fi
