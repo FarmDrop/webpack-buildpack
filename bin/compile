@@ -20,5 +20,5 @@ rake_task_exists() {
 
 # Upload source maps to Rollbar
 if rake_task_exists; then
-  RAILS_ENV=$(cat $3/RAILS_ENV) SOURCE_VERSION=$SOURCE_VERSION bundle exec rake rollbar:upload_source_maps
+  RAILS_ENV=$(cat $3/RAILS_ENV) ROLLBAR_ACCESS_TOKEN=$(cat $3/ROLLBAR_ACCESS_TOKEN) SOURCE_VERSION=$SOURCE_VERSION bundle exec rake rollbar:upload_source_maps
 fi
