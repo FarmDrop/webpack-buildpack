@@ -17,6 +17,6 @@ rake_task_exists() {
 }
 
 # Upload source maps to Rollbar
-if [[ $(cat $3/RAILS_ENV) == 'production' ]] && rake_task_exists; then
+if rake_task_exists; then
   bundle exec rake rollbar:upload_source_maps
 fi
