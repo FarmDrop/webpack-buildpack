@@ -7,3 +7,16 @@ cd $1
 # to a directory. $3 is the directory path.
 # https://devcenter.heroku.com/articles/buildpack-api#bin-compile
 RAILS_ENV=$(cat $3/RAILS_ENV) bundle exec rake webpack:compile --trace
+
+rake_task_exists() {
+  if [[ $(bundle exec rake --tasks | grep rollbar:upload_source_maps | wc -l | xargs) == 1 ]]; then
+    return 0;
+  else
+    return 1;
+  fi
+}
+
+# Upload source maps to Rollbar
+if [[ $(cat $3/RAILS_ENV) == 'production' ]] && rake_task_exists; then
+  bundle exec rake rollbar:upload_source_maps
+fi
