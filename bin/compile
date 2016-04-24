@@ -1,12 +1,13 @@
 #!/bin/bash
 
 # $1 is the build dir
+env_dir=$3
 cd $1
 
 # ENV vars are not injected into the environment, but are written one per file
 # to a directory. $3 is the directory path.
 # https://devcenter.heroku.com/articles/buildpack-api#bin-compile
-RAILS_ENV=$(cat $3/RAILS_ENV) bundle exec rake webpack:compile --trace
+RAILS_ENV=$(cat $env_dir/RAILS_ENV) bundle exec rake webpack:compile --trace
 
 rake_task_exists() {
   if [[ $(bundle exec rake --tasks | grep rollbar:upload_source_maps | wc -l | xargs) == 1 ]]; then
@@ -20,5 +21,5 @@ rake_task_exists() {
 
 # Upload source maps to Rollbar
 if rake_task_exists; then
-  RAILS_ENV=$(cat $3/RAILS_ENV) ROLLBAR_ACCESS_TOKEN=$(cat $3/ROLLBAR_ACCESS_TOKEN) SOURCE_VERSION=$SOURCE_VERSION bundle exec rake rollbar:upload_source_maps
+  RAILS_ENV=$(cat $env_dir/RAILS_ENV) HEROKU_APP_NAME=$HEROKU_APP_NAME ROLLBAR_ACCESS_TOKEN=$(cat $env_dir/ROLLBAR_ACCESS_TOKEN) SOURCE_VERSION=$SOURCE_VERSION bundle exec rake rollbar:upload_source_maps
 fi
