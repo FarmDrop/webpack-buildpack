@@ -29,5 +29,5 @@ echo $app_name
 
 # Upload source maps to Rollbar
 if rake_task_exists; then
-  RAILS_ENV=$(cat $env_dir/RAILS_ENV) HEROKU_APP_NAME=$app_name ROLLBAR_ACCESS_TOKEN=$(cat $env_dir/ROLLBAR_ACCESS_TOKEN) SOURCE_VERSION=$SOURCE_VERSION bundle exec rake rollbar:upload_source_maps
+  RAILS_ENV=$(cat $env_dir/RAILS_ENV) WWW_URL=$(cat $env_dir/WWW_URL) HEROKU_APP_NAME=$app_name ROLLBAR_ACCESS_TOKEN=$(cat $env_dir/ROLLBAR_ACCESS_TOKEN) SOURCE_VERSION=$SOURCE_VERSION bundle exec rake rollbar:upload_source_maps
 fi
