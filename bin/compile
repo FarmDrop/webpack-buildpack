@@ -19,7 +19,13 @@ rake_task_exists() {
   fi
 }
 
+receive_data=$(cat $env_dir/RECEIVE_DATA)
+regex='"name":"([^"]*)",'
+if [[ $receive_data =~ $regex ]]; then
+  app_name="${BASH_REMATCH[1]}"
+fi
+
 # Upload source maps to Rollbar
 if rake_task_exists; then
-  RAILS_ENV=$(cat $env_dir/RAILS_ENV) HEROKU_APP_NAME=$HEROKU_APP_NAME ROLLBAR_ACCESS_TOKEN=$(cat $env_dir/ROLLBAR_ACCESS_TOKEN) SOURCE_VERSION=$SOURCE_VERSION bundle exec rake rollbar:upload_source_maps
+  RAILS_ENV=$(cat $env_dir/RAILS_ENV) HEROKU_APP_NAME=$app_name ROLLBAR_ACCESS_TOKEN=$(cat $env_dir/ROLLBAR_ACCESS_TOKEN) SOURCE_VERSION=$SOURCE_VERSION bundle exec rake rollbar:upload_source_maps
 fi
